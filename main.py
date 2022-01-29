@@ -5,7 +5,7 @@ from typing import Optional
 from pydantic import BaseModel
 
 # FastAPI
-from fastapi import FastAPI, Body
+from fastapi import FastAPI, Body, Query
 
 # Inicializando la app
 app = FastAPI()
@@ -35,3 +35,12 @@ def home():
 def create_person(person: Person = Body(...)):  # Cada vez que se encuentre ese triple punto en fastapi, significa que
     # ese parametro es obligatorio
     return person
+
+# Validaciones: Query Parameters
+
+@app.get("/person/detail")
+def show_person(
+        name: Optional[str] = Query(None, min_length=1, max_length=50),
+        age: str = Query(...)
+):
+    return {name: age}
