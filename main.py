@@ -28,16 +28,19 @@ class Location(BaseModel):
         ...,
         min_length=1,
         max_length=35,
+        example="San Cristobal"
     )
     state: str = Field(
         ...,
         min_length=1,
-        max_length=35
+        max_length=35,
+        example="Tachira"
     )
     country: str = Field(
         ...,
         min_length=1,
-        max_length=35
+        max_length=35,
+        example="Venezuela"
     )
 
 
@@ -46,27 +49,39 @@ class Person(BaseModel):
         ...,
         min_length=1,
         max_length=50,
+        example="Miguel"
     )
     last_name: str = Field(
         ...,
         min_length=1,
         max_length=50,
+        example="Torres"
     )
     age: int = Field(
         ...,
         gt=17,
-        le=115
+        le=115,
+        example=21
     )
     # De esta manera se declaran campos opcionales con valores por defecto
-    hair_color: Optional[HairColor] = Field(default=None)
-    is_married: Optional[bool] = Field(default=None)
+    hair_color: Optional[HairColor] = Field(default=None, example="black")
+    is_married: Optional[bool] = Field(default=None, example=False)
     email: str = EmailStr(
         ...,
     )
-    web_page: str = HttpUrl(
-        ...,
-    )
-    identity: int = PositiveInt(...)
+    web_page: str = HttpUrl
+    identity: int = PositiveInt
+
+    # class Config:
+    #    schema_extra = {
+    #        "example": {
+    #            "first_name": "Facundo",
+    #            "last_name": "Garcia",
+    #            "age": 21,
+    #            "hair_color": "blonde",
+    #            "is_married": False
+    #        }
+    #    }
 
 
 # Path operation de home - Get
@@ -131,6 +146,9 @@ def update_person(
         person: Person = Body(...),
         location: Location = Body(...)
 ):
-    results = person.dict()
-    results.update(location.dict())
-    return results
+    # results = person.dict()
+    # results.update(location.dict())
+    # return results
+
+    return {"person": person, "location": location}
+
