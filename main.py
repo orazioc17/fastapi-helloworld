@@ -1,8 +1,9 @@
 # Python
 from typing import Optional
+from enum import Enum  # Sirve para crear enumeraciones de string
 
 # Pydantic
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, EmailStr, HttpUrl, PositiveInt, conint
 
 # FastAPI
 from fastapi import FastAPI, Body, Query, Path
@@ -13,18 +14,59 @@ app = FastAPI()
 
 # Model
 
+
+class HairColor(Enum):
+    white = "white"
+    brown = "brown"
+    black = "black"
+    blonde = "blonde"
+    red = "red"
+
+
 class Location(BaseModel):
-    city: str
-    state: str
-    country: str
+    city: str = Field(
+        ...,
+        min_length=1,
+        max_length=35,
+    )
+    state: str = Field(
+        ...,
+        min_length=1,
+        max_length=35
+    )
+    country: str = Field(
+        ...,
+        min_length=1,
+        max_length=35
+    )
+
 
 class Person(BaseModel):
-    first_name: str
-    last_name: str
-    age: int
+    first_name: str = Field(
+        ...,
+        min_length=1,
+        max_length=50,
+    )
+    last_name: str = Field(
+        ...,
+        min_length=1,
+        max_length=50,
+    )
+    age: int = Field(
+        ...,
+        gt=17,
+        le=115
+    )
     # De esta manera se declaran campos opcionales con valores por defecto
-    hair_color: Optional[str] = None
-    is_married: Optional[bool] = None
+    hair_color: Optional[HairColor] = Field(default=None)
+    is_married: Optional[bool] = Field(default=None)
+    email: str = EmailStr(
+        ...,
+    )
+    web_page: str = HttpUrl(
+        ...,
+    )
+    identity: int = PositiveInt(...)
 
 
 # Path operation de home - Get
