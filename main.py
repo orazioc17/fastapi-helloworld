@@ -44,7 +44,7 @@ class Location(BaseModel):
     )
 
 
-class Person(BaseModel):
+class PersonBase(BaseModel):
     first_name: str = Field(
         ...,
         min_length=1,
@@ -71,58 +71,26 @@ class Person(BaseModel):
     )
     web_page: str = HttpUrl
     identity: int = PositiveInt
+
+    # class Config:
+    #    schema_extra = {
+    #        "example": {
+    #            "first_name": "Facundo",
+    #            "last_name": "Garcia",
+    #            "age": 21,
+    #            "hair_color": "blonde",
+    #            "is_married": False
+    #        }
+    #    }
+
+
+class Person(PersonBase):
+
     password: str = Field(..., min_length=8)
 
-    # class Config:
-    #    schema_extra = {
-    #        "example": {
-    #            "first_name": "Facundo",
-    #            "last_name": "Garcia",
-    #            "age": 21,
-    #            "hair_color": "blonde",
-    #            "is_married": False
-    #        }
-    #    }
 
-
-class PersonOut(BaseModel):
-    first_name: str = Field(
-        ...,
-        min_length=1,
-        max_length=50,
-        example="Miguel"
-    )
-    last_name: str = Field(
-        ...,
-        min_length=1,
-        max_length=50,
-        example="Torres"
-    )
-    age: int = Field(
-        ...,
-        gt=17,
-        le=115,
-        example=21
-    )
-    # De esta manera se declaran campos opcionales con valores por defecto
-    hair_color: Optional[HairColor] = Field(default=None, example="black")
-    is_married: Optional[bool] = Field(default=None, example=False)
-    email: str = EmailStr(
-        ...,
-    )
-    web_page: str = HttpUrl
-    identity: int = PositiveInt
-
-    # class Config:
-    #    schema_extra = {
-    #        "example": {
-    #            "first_name": "Facundo",
-    #            "last_name": "Garcia",
-    #            "age": 21,
-    #            "hair_color": "blonde",
-    #            "is_married": False
-    #        }
-    #    }
+class PersonOut(PersonBase):
+    pass
 
 
 # Path operation de home - Get
