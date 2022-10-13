@@ -6,7 +6,7 @@ from enum import Enum  # Sirve para crear enumeraciones de string
 from pydantic import BaseModel, Field, EmailStr, HttpUrl, PositiveInt, conint
 
 # FastAPI
-from fastapi import FastAPI, Body, Query, Path
+from fastapi import FastAPI, Body, Query, Path, status
 
 # Inicializando la app
 app = FastAPI()
@@ -93,8 +93,11 @@ class PersonOut(PersonBase):
     pass
 
 
-# Path operation de home - Get
-@app.get("/")
+# Path operation de home - Get ----- Aqui tambien se especifica el status code del response
+@app.get(
+    path="/",
+    status_code=status.HTTP_200_OK
+)
 def home():
     return {'hello': 'Hola mundo'}
 
@@ -102,15 +105,22 @@ def home():
 # Request and Response Body
 
 
-@app.post("/person/new", response_model=PersonOut)
-def create_person(person: Person = Body(...)):  # Cada vez que se encuentre ese triple punto en fastapi, significa que
-    # ese parametro es obligatorio
+@app.post(
+    path="/person/new",
+    response_model=PersonOut,
+    status_code=status.HTTP_201_CREATED
+)
+# Cada vez que se encuentre ese triple punto en fastapi, significa que ese parametro es obligatorio
+def create_person(person: Person = Body(...)):
     return person
 
 
 # Validaciones: Query Parameters
 
-@app.get("/person/detail")
+@app.get(
+    path="/person/detail",
+    status_code=status.HTTP_200_OK
+)
 def show_person(
         name: Optional[str] = Query(
             None,
@@ -133,7 +143,10 @@ def show_person(
 
 # Validaciones: Path parameters
 
-@app.get("/person/detail/{person_id}")
+@app.get(
+    path="/person/detail/{person_id}",
+    status_code=status.HTTP_200_OK
+)
 def show_person(
         person_id: int = Path(
             ...,
@@ -147,7 +160,10 @@ def show_person(
 
 
 # Validaciones: body parameters
-@app.put("/person/{person_id}")
+@app.put(
+    path="/person/{person_id}",
+    status_code=status.HTTP_201_CREATED
+)
 def update_person(
         person_id: int = Path(
             ...,
@@ -164,4 +180,3 @@ def update_person(
     # return results
 
     return {"person": person, "location": location}
-

@@ -1,2 +1,2 @@
-# fastapi-helloworld
-FIrst project using Python framework FastAPI
+# FastAPI course project
+First project using Python framework FastAPI
