@@ -2,7 +2,7 @@
 from typing import Optional
 
 # FastAPI
-from fastapi import FastAPI, Body, Query, Path, status, Form, Header, Cookie
+from fastapi import FastAPI, Body, Query, Path, status, Form, Header, Cookie, UploadFile, File
 
 # Pydantic
 from pydantic import EmailStr
@@ -134,3 +134,17 @@ def contact(
     ads: Optional[str] = Cookie(default=None)
 ):
     return user_agent
+
+# Working with files
+@app.post(
+    path="/post-image"
+)
+def post_image(
+        image: UploadFile = File(...)
+):
+    # FastAPI se encargara de transformar automaticamente este diccionario a un json
+    return {
+        "Filename": image.filename,
+        "Format": image.content_type,
+        "Size(kb)": round(len(image.file.read())/1024, ndigits=2)
+    }
