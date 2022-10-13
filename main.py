@@ -20,6 +20,10 @@ app = FastAPI()
     status_code=status.HTTP_200_OK
 )
 def home():
+    """
+
+    :return:
+    """
     return {'hello': 'Hola mundo'}
 
 
@@ -30,10 +34,23 @@ def home():
     path="/person/new",
     response_model=PersonOut,
     status_code=status.HTTP_201_CREATED,
-    tags=["Persons"]
+    tags=["Persons"],
+    summary="Create Person in the app"  # permite darle un nombre personalizado a la funcion para mostrarlo en la doc
 )
 # Cada vez que se encuentre ese triple punto en fastapi, significa que ese parametro es obligatorio
 def create_person(person: Person = Body(...)):
+    """
+    Create Person
+
+    This path operation creates a person in the app and save the information in the database
+
+    Parameters:
+    * Request body parameter:
+        * **person: Person** -> A person model with first name, last name, age, hair color and marital status
+
+    Returns a person model with first name, last name, age, hair color and marital status
+
+    """
     return person
 
 
