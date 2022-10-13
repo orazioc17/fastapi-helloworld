@@ -29,7 +29,8 @@ def home():
 @app.post(
     path="/person/new",
     response_model=PersonOut,
-    status_code=status.HTTP_201_CREATED
+    status_code=status.HTTP_201_CREATED,
+    tags=["Persons"]
 )
 # Cada vez que se encuentre ese triple punto en fastapi, significa que ese parametro es obligatorio
 def create_person(person: Person = Body(...)):
@@ -40,7 +41,8 @@ def create_person(person: Person = Body(...)):
 
 @app.get(
     path="/person/detail",
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=["Persons"]
 )
 def show_person(
         name: Optional[str] = Query(
@@ -67,7 +69,8 @@ persons = [1, 2, 3, 4, 5]
 
 @app.get(
     path="/person/detail/{person_id}",
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=["Persons"]
 )
 def show_person(
         person_id: int = Path(
@@ -89,7 +92,8 @@ def show_person(
 # Validaciones: body parameters
 @app.put(
     path="/person/{person_id}",
-    status_code=status.HTTP_201_CREATED
+    status_code=status.HTTP_201_CREATED,
+    tags=["Persons"]
 )
 def update_person(
         person_id: int = Path(
@@ -111,7 +115,8 @@ def update_person(
 @app.post(
     path="/login",
     response_model=LoginOut,
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=["Persons"]
 )
 # Aqui se recibe un formulario desde el frontend --- Recordar que ... es para indicar que es obligatorio
 def login(username: str = Form(...), password: str = Form(...)):
