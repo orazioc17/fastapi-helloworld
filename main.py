@@ -2,10 +2,13 @@
 from typing import Optional
 
 # FastAPI
-from fastapi import FastAPI, Body, Query, Path, status, Form
+from fastapi import FastAPI, Body, Query, Path, status, Form, Header, Cookie
+
+# Pydantic
+from pydantic import EmailStr
 
 # Models
-from models import PersonBase, Person, PersonOut, HairColor, Location, LoginOut
+from models import Person, PersonOut, Location, LoginOut
 
 # Inicializando la app
 app = FastAPI()
@@ -58,7 +61,7 @@ def show_person(
 ):
     return {name: age}
 
-LoginOut
+
 @app.get(
     path="/person/detail/{person_id}",
     status_code=status.HTTP_200_OK
@@ -106,3 +109,28 @@ def update_person(
 def login(username: str = Form(...), password: str = Form(...)):
     # return LoginOut esto daba error porque se debia retornar un json y estabamos retornando la clase
     return LoginOut(username=username)
+
+
+# Cookies and Headers parameters
+@app.post(
+    path="/contact",
+    status_code=status.HTTP_200_OK
+)
+def contact(
+    first_name: str = Form(
+        ...,
+        max_length=20,
+        min_length=1
+    ),
+    last_name: str = Form(
+        ...,
+        max_length=20,
+        min_length=1
+    ),
+    email: EmailStr = Form(...),
+    message: str = Form(..., min_length=20),
+    user_agent: Optional[str] = Header(default=None),
+    # ads controla las cookies que nos envia el servidor que tenemos trabajando con la api
+    ads: Optional[str] = Cookie(default=None)
+):
+    return user_agent
